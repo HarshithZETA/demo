@@ -1,0 +1,46 @@
+        if(temp2 != 0x000F0000)                // store the value in res1
+        {
+        	flag = 0xff;
+          	res1 = temp2; 
+          	t = (temp3 & 0x00F00000);           //Verfying Row Write
+          	res1 = res1 | t;                    //final scan value is stored in res1
+        }
+        else
+        {
+        	flag = 0x00;
+        }
+    }
+}  // end of scan()
+			 	 	 	    	 
+void display(void)
+{	  
+    ptr = disp0;
+	temp1 = 0x80;			// Display starting address of first line
+	lcd_com();
+    
+	while(*ptr!='\0')
+    {
+    	temp1 = *ptr;
+      	lcd_data();
+	  	ptr ++;
+    } 
+
+    ptr = disp1;
+	temp1 = 0xC0;			// Display starting address of second line
+	lcd_com();
+        
+	while(*ptr!='\0')
+    {
+    	temp1 = *ptr;
+        lcd_data();
+	  	ptr ++;
+    }
+    temp1 = 0xC6;			//display  address for key value
+	lcd_com();
+    temp1 = result;    
+    lcd_data();	
+}  
+void init_port()
+{    
+    IO0DIR = 0x000000FC;	//configure o/p lines for lcd 
+	IO1DIR = 0XFFF0FFFF;
